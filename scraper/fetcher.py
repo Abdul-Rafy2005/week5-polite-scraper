@@ -1,3 +1,4 @@
+import re
 import time
 import logging
 from urllib.parse import urlparse
@@ -61,7 +62,7 @@ class RateLimitedFetcher:
 
                 if status == 200:
                     self.visited.add(url)
-                    resp.encoding = resp.apparent_encoding or resp.encoding
+                    resp.encoding = self._detect_encoding(resp)
                     return resp
 
                 logger.warning("HTTP %d for %s — not retrying", status, url)
@@ -108,3 +109,15 @@ class RateLimitedFetcher:
             "GET %s -> %d (%.3fs)%s",
             url, status, elapsed, " [RETRIED]" if retried else "",
         )
+
+    @staticmethod
+    def _detect_encoding(resp: requests.Response) -> str:
+        # Check HTML meta charset first (most reliable for HTML pages)
+        content_type = resp.headers.get("content-type", "")
+        if "text/html" in content_type:
+            head = resp.content[:4096]
+            match = re.search(rb'charset=["\']?([A-Za-z0-9_-]+)', head, re.IGNORECASE)
+            if match:
+                return match.group(1).decode("ascii")
+        # Fall back to apparent_encoding, then raw encoding
+        return resp.apparent_encoding or resp.encoding
