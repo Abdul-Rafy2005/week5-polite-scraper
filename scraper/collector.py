@@ -26,7 +26,7 @@ class Collector:
             pages_fetched += 1
             soup = BeautifulSoup(resp.text, "html.parser")
 
-            self._extract_product_links(soup)
+            self._extract_product_links(soup, url)
             url = self._find_next_page(soup, url)
 
         logger.info(
@@ -36,16 +36,17 @@ class Collector:
         )
         return list(self.product_urls)
 
-    def _extract_product_links(self, soup: BeautifulSoup) -> None:
+    def _extract_product_links(self, soup: BeautifulSoup, current_url: str) -> None:
         for article in soup.select("article.product_pod"):
             link = article.select_one("h3 a")
             if link and link.get("href"):
                 href = link["href"]
-                if not href.startswith("http"):
-                    href = urljoin(self.base_url + "/", href)
-                if self.base_url in href:
-                    if href not in self.fetcher.visited:
-                        self.product_urls.append(href)
+                # Resolve relative to the current listing page URL
+                full_url = urljoin(current_url, href)
+                # Only follow links within books.toscrape.com
+                if self.base_url in full_url:
+                    if full_url not in self.fetcher.visited:
+                        self.product_urls.append(full_url)
 
     def _find_next_page(self, soup: BeautifulSoup, current_url: str) -> str | None:
         next_btn = soup.select_one("li.next a")
