@@ -6,7 +6,7 @@ A well-behaved, rate-limited web scraper for [books.toscrape.com](https://books.
 
 Most scrapers blast a server with requests as fast as possible. This one is designed to behave like a good citizen:
 
-- **Respects `robots.txt`** — before scraping, it fetches and parses the site's robots.txt file, checks whether our target paths are allowed for our User-Agent, and obeys any `Crawl-delay` directive.
+- **Respects `robots.txt`** — before scraping, it fetches and parses the site's robots.txt file, checks whether our target paths are allowed for our User-Agent, and obeys any `Crawl-delay` directive. Check result is logged at INFO level for transparency.
 - **Identifies itself** — sends a clear, honest `User-Agent` string: `PoliteScraperBot/1.0 (+educational project; contact: you@example.com)`.
 - **Rate-limits requests** — enforces a configurable minimum delay between requests (default: 1.5 seconds).
 - **Retries with backoff** — handles transient errors gracefully with exponential backoff; backs off further on 429 Too Many Requests.
@@ -73,7 +73,7 @@ All settings live in `config.yaml` (falls back to built-in defaults if missing):
 - **Single-threaded** — one request at a time by design (politeness); no concurrent fetching.
 - **books.toscrape.com only** — hardcoded to stay within this domain; does not follow external links.
 - **No persistence across runs** — the visited set resets each run; re-crawling is expected.
-- **Encoding edge cases** — some non-ASCII characters may render imperfectly depending on site encoding.
+- **Encoding handled** — uses HTML `<meta charset>` detection to avoid mojibake (e.g. `£` vs `┬ú`); falls back to `requests` auto-detection.
 
 ## Project Structure
 
