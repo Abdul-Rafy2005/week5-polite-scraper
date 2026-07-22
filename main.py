@@ -5,6 +5,7 @@ from scraper.robots import RobotsChecker
 from scraper.fetcher import RateLimitedFetcher
 from scraper.collector import Collector
 from scraper.parser import parse_product_page
+from scraper.cleaner import clean_records
 
 logger = logging.getLogger("polite_scraper")
 
@@ -23,7 +24,7 @@ def main():
     logger.info("Collected %d product URLs", len(product_urls))
 
     # Fetch and parse each product page
-    records = []
+    raw_records = []
     for i, url in enumerate(product_urls, 1):
         logger.info("Parsing product %d/%d: %s", i, len(product_urls), url)
         resp = fetcher.fetch(url)
@@ -31,10 +32,15 @@ def main():
             logger.warning("Failed to fetch product page: %s", url)
             continue
         record = parse_product_page(resp.text, url, cfg["base_url"])
-        records.append(record)
+        raw_records.append(record)
 
-    logger.info("Total records extracted: %d", len(records))
-    for r in records[:3]:
+    logger.info("Raw records extracted: %d", len(raw_records))
+
+    # Clean
+    cleaned = clean_records(raw_records)
+    logger.info("Cleaned records: %d", len(cleaned))
+
+    for r in cleaned[:3]:
         logger.info("  Sample: %s", r)
 
 

@@ -61,6 +61,7 @@ class RateLimitedFetcher:
 
                 if status == 200:
                     self.visited.add(url)
+                    resp.encoding = resp.apparent_encoding or resp.encoding
                     return resp
 
                 logger.warning("HTTP %d for %s — not retrying", status, url)
