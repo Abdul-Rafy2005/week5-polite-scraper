@@ -70,8 +70,8 @@ def _clean_one(rec: dict) -> dict:
     desc = out.get("description")
     if desc:
         desc = html.unescape(desc).strip()
-        # Remove trailing "...more" or "...more" variant
-        desc = re.sub(r"\s*\.\.\.more\s*$", "", desc)
+        # Remove trailing "...more" or "…more" (unicode ellipsis) and variants
+        desc = re.sub(r"\s*(?:\.\.\.|\u2026)\s*more\s*$", "", desc)
         out["description"] = desc
 
     return out
