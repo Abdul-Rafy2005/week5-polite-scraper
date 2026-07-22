@@ -2,6 +2,7 @@ from scraper.config import load_config
 from scraper.logging_config import setup_logging
 from scraper.robots import RobotsChecker
 from scraper.fetcher import RateLimitedFetcher
+from scraper.collector import Collector
 
 
 def main():
@@ -12,15 +13,13 @@ def main():
     robots = RobotsChecker(cfg["base_url"], cfg["user_agent"])
     robots.fetch()
 
-    summary = robots.get_restriction_summary()
-    logger.info("robots.txt summary: %s", summary)
-
     fetcher = RateLimitedFetcher(cfg, robots)
-    resp = fetcher.fetch(cfg["base_url"])
-    if resp:
-        logger.info("Fetched homepage: %d", resp.status_code)
-    else:
-        logger.error("Failed to fetch homepage")
+    collector = Collector(cfg["base_url"], fetcher)
+    product_urls = collector.crawl(max_pages=cfg["max_pages"])
+
+    logger.info("Collected %d product URLs", len(product_urls))
+    for i, url in enumerate(product_urls[:5], 1):
+        logger.info("  %d. %s", i, url)
 
 
 if __name__ == "__main__":
