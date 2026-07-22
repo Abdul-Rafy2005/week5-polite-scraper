@@ -30,14 +30,21 @@ class RobotsChecker:
                 self.fetched = True
                 self._extract_delay()
                 self._extract_restrictions()
-                logger.info("robots.txt fetched successfully from %s", robots_url)
+                logger.info(
+                    "robots.txt check: fetched successfully (HTTP %d) — %s",
+                    resp.status_code,
+                    "restrictions honored" if self.restrictions or self.crawl_delay else "no restrictions, proceeding under default politeness settings",
+                )
             else:
-                logger.warning(
-                    "robots.txt returned status %d — treating as no restrictions",
+                logger.info(
+                    "robots.txt check: not found (HTTP %d) — no restrictions, proceeding under default politeness settings",
                     resp.status_code,
                 )
         except requests.RequestException as e:
-            logger.warning("Failed to fetch robots.txt: %s — treating as no restrictions", e)
+            logger.info(
+                "robots.txt check: fetch failed (%s) — no restrictions, proceeding under default politeness settings",
+                e,
+            )
 
     def _extract_delay(self) -> None:
         delay = self.parser.crawl_delay(self.user_agent)
