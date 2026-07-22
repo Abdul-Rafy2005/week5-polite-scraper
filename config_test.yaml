@@ -1,9 +1,0 @@
-base_url: https://books.toscrape.com
-delay: 1.5
-log_file: scraper.log
-max_pages: 1
-max_retries: 3
-output_csv: data/books.csv
-output_json: data/books.json
-timeout: 10
-user_agent: 'PoliteScraperBot/1.0 (+educational project; contact: you@example.com)'
