@@ -10,7 +10,7 @@ Most scrapers blast a server with requests as fast as possible. This one is desi
 - **Identifies itself** — sends a clear, honest `User-Agent` string: `PoliteScraperBot/1.0 (+educational project; contact: you@example.com)`.
 - **Rate-limits requests** — enforces a configurable minimum delay between requests (default: 1.5 seconds).
 - **Retries with backoff** — handles transient errors gracefully with exponential backoff; backs off further on 429 Too Many Requests.
-- **Caps total pages** — a `max_pages` config prevents accidental over-crawling.
+- **Caps listing pages** — a `max_listing_pages` config prevents accidental over-crawling.
 
 ## How to Run
 
@@ -29,7 +29,7 @@ All settings live in `config.yaml` (falls back to built-in defaults if missing):
 |------|---------|---------|
 | `base_url` | `https://books.toscrape.com` | Target site base URL |
 | `delay` | `1.5` | Minimum seconds between requests |
-| `max_pages` | `20` | Max listing pages to crawl per run |
+| `max_listing_pages` | `20` | Max listing/category pages to crawl per run; product pages scale proportionally (~20 per listing page) and are not separately capped |
 | `max_retries` | `3` | Max retries on network/5xx errors |
 | `user_agent` | `PoliteScraperBot/1.0 (+educational project; contact: you@example.com)` | User-Agent header |
 | `output_json` | `data/books.json` | JSON output path |

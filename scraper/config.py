@@ -4,7 +4,7 @@ from pathlib import Path
 DEFAULTS = {
     "base_url": "https://books.toscrape.com",
     "delay": 1.5,
-    "max_pages": 20,
+    "max_listing_pages": 20,
     "max_retries": 3,
     "user_agent": "PoliteScraperBot/1.0 (+educational project; contact: you@example.com)",
     "output_json": "data/books.json",

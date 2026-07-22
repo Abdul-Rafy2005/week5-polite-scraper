@@ -24,7 +24,7 @@ def main():
 
     fetcher = RateLimitedFetcher(cfg, robots)
     collector = Collector(cfg["base_url"], fetcher)
-    product_urls = collector.crawl(max_pages=cfg["max_pages"])
+    product_urls = collector.crawl(max_listing_pages=cfg["max_listing_pages"])
     logger.info("Collected %d product URLs", len(product_urls))
 
     # Fetch and parse each product page

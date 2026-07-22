@@ -12,11 +12,11 @@ class Collector:
         self.fetcher = fetcher
         self.product_urls: list[str] = []
 
-    def crawl(self, max_pages: int) -> list[str]:
+    def crawl(self, max_listing_pages: int) -> list[str]:
         url = self.base_url
         pages_fetched = 0
 
-        while url and pages_fetched < max_pages:
+        while url and pages_fetched < max_listing_pages:
             logger.info("Crawling page %d: %s", pages_fetched + 1, url)
             resp = self.fetcher.fetch(url)
             if resp is None:
