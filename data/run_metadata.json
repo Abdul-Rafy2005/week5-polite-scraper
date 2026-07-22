@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-07-22T13:41:47.823043+00:00",
-  "total_pages_fetched": 21,
-  "total_records_extracted": 20,
+  "timestamp": "2026-07-22T15:23:51.791434+00:00",
+  "total_pages_fetched": 420,
+  "total_records_extracted": 400,
   "robots_txt_restrictions": {
     "robots_txt_fetched": false,
     "crawl_delay": null,
     "disallowed_paths": []
   },
-  "total_run_duration_seconds": 33.85,
-  "total_requests": 21,
+  "total_run_duration_seconds": 633.1,
+  "total_requests": 420,
   "retried_requests": 0
 }
